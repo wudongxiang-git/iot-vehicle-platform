@@ -1,0 +1,123 @@
+version: '3.8'
+
+services:
+  # PostgreSQL 数据库
+  postgres:
+    image: postgres:15-alpine
+    container_name: iot-vehicle-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: iot_vehicle
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      TZ: Asia/Shanghai
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - iot-vehicle-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: iot-vehicle-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ""
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - iot-vehicle-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # EMQ X MQTT Broker
+  emqx:
+    image: emqx/emqx:5.3.2
+    container_name: iot-vehicle-emqx
+    restart: unless-stopped
+    environment:
+      - EMQX_NAME=emqx
+      - EMQX_HOST=node1.emqx.io
+      - EMQX_DASHBOARD__DEFAULT_USERNAME=admin
+      - EMQX_DASHBOARD__DEFAULT_PASSWORD=admin123
+    ports:
+      - "1883:1883"      # MQTT TCP
+      - "8883:8883"      # MQTT SSL
+      - "8083:8083"      # MQTT WebSocket
+      - "8084:8084"      # MQTT WebSocket SSL
+      - "18083:18083"    # Dashboard
+    volumes:
+      - emqx-data:/opt/emqx/data
+      - emqx-log:/opt/emqx/log
+    networks:
+      - iot-vehicle-network
+    healthcheck:
+      test: ["CMD", "emqx", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Commander (可选，用于查看Redis数据)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: iot-vehicle-redis-commander
+    restart: unless-stopped
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - iot-vehicle-network
+    depends_on:
+      - redis
+    profiles:
+      - tools
+
+  # pgAdmin (可选，用于管理PostgreSQL)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: iot-vehicle-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@iotvehicle.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - iot-vehicle-network
+    depends_on:
+      - postgres
+    profiles:
+      - tools
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  emqx-data:
+    driver: local
+  emqx-log:
+    driver: local
+  pgadmin-data:
+    driver: local
+
+networks:
+  iot-vehicle-network:
+    driver: bridge
+
