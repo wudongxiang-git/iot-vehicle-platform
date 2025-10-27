@@ -93,16 +93,15 @@ application-*.yml.bak
 *.tmp
 *.temp
 
-# Development Plans (personal tracking, not for git)
+# Documentation (local only)
+REFACTORING.md
+docs/ARCHITECTURE.md
+docs/ENV_CONFIG.md
 docs/DEVELOPMENT_PLAN.md
 docs/DOCKER_DEV_SETUP.md
-docs/ENV_CONFIG.md
-docs/plans/
-docs/progress/
 
 # Docker backup files
 backup/
 *.sql
 !docker/postgres/init/*.sql
 *.rdb
-
