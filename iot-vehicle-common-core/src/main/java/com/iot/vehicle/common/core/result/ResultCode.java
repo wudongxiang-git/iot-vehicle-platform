@@ -1,4 +1,4 @@
-package com.iot.vehicle.common.result;
+package com.iot.vehicle.common.core.result;
 
 import lombok.Getter;
 

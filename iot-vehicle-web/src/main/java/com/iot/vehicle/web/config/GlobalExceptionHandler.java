@@ -1,8 +1,8 @@
 package com.iot.vehicle.web.config;
 
-import com.iot.vehicle.common.exception.BusinessException;
-import com.iot.vehicle.common.result.Result;
-import com.iot.vehicle.common.result.ResultCode;
+import com.iot.vehicle.common.core.exception.BusinessException;
+import com.iot.vehicle.common.core.result.Result;
+import com.iot.vehicle.common.core.result.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;

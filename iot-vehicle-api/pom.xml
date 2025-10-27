@@ -18,16 +18,16 @@
     <description>API模块 - 实体类、DTO、VO等</description>
 
     <dependencies>
-        <!-- Common Module -->
+        <!-- Common Core -->
         <dependency>
             <groupId>com.iot.vehicle</groupId>
-            <artifactId>iot-vehicle-common</artifactId>
+            <artifactId>iot-vehicle-common-core</artifactId>
         </dependency>
 
-        <!-- MyBatis-Plus -->
+        <!-- Common MyBatis -->
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <groupId>com.iot.vehicle</groupId>
+            <artifactId>iot-vehicle-common-mybatis</artifactId>
         </dependency>
 
         <!-- Lombok -->

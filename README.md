@@ -72,14 +72,16 @@ IoT Vehicle Platform 是一个基于 Spring Boot 3 和 PostgreSQL 构建的通�
 
 ```
 iot-vehicle-platform/
-├── iot-vehicle-parent          # 父模块（依赖管理）
-├── iot-vehicle-common          # 公共模块（工具类、常量、异常）
-├── iot-vehicle-api             # API模块（实体类、DTO、VO）
-├── iot-vehicle-service         # 服务层（业务逻辑）
-├── iot-vehicle-web             # Web层（Controller、配置）
-├── iot-vehicle-simulator       # 设备模拟器（待开发）
-├── iot-vehicle-frontend        # 前端项目（待开发）
-└── iot-vehicle-mobile          # 移动端项目（待开发）
+├── iot-vehicle-parent              # 父模块（依赖管理）
+├── iot-vehicle-common-core         # 公共核心模块（工具类、常量、异常）
+├── iot-vehicle-common-mybatis      # MyBatis-Plus公共模块（分页等）
+├── iot-vehicle-common-redis        # Redis公共模块（待开发）
+├── iot-vehicle-api                 # API模块（实体类、DTO、VO）
+├── iot-vehicle-service             # 服务层（业务逻辑）
+├── iot-vehicle-web                 # Web层（Controller、配置）
+├── iot-vehicle-simulator           # 设备模拟器（待开发）
+├── iot-vehicle-frontend            # 前端项目（待开发）
+└── iot-vehicle-mobile              # 移动端项目（待开发）
 ```
 
 ---

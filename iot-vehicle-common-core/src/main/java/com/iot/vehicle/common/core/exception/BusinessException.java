@@ -1,6 +1,6 @@
-package com.iot.vehicle.common.exception;
+package com.iot.vehicle.common.core.exception;
 
-import com.iot.vehicle.common.result.ResultCode;
+import com.iot.vehicle.common.core.result.ResultCode;
 import lombok.Getter;
 
 /**

@@ -11,17 +11,23 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>iot-vehicle-common</artifactId>
+    <artifactId>iot-vehicle-common-mybatis</artifactId>
     <packaging>jar</packaging>
 
-    <name>iot-vehicle-common</name>
-    <description>公共模块 - 工具类、常量、异常等</description>
+    <name>iot-vehicle-common-mybatis</name>
+    <description>MyBatis-Plus公共模块 - 分页工具、数据库相关工具类</description>
 
     <dependencies>
-        <!-- Spring Boot Web (for common annotations) -->
+        <!-- Common Core -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.iot.vehicle</groupId>
+            <artifactId>iot-vehicle-common-core</artifactId>
+        </dependency>
+
+        <!-- MyBatis-Plus -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
 
         <!-- Lombok -->
@@ -29,24 +35,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- Hutool -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-        </dependency>
-
-        <!-- Fastjson2 -->
-        <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
-        </dependency>
-
-        <!-- Jakarta Validation -->
-        <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
         </dependency>
 
         <!-- Spring Boot Test -->

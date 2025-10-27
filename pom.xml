@@ -14,7 +14,9 @@
     <description>车联网数据管理平台</description>
 
     <modules>
-        <module>iot-vehicle-common</module>
+        <module>iot-vehicle-common-core</module>
+        <module>iot-vehicle-common-mybatis</module>
+        <module>iot-vehicle-common-redis</module>
         <module>iot-vehicle-api</module>
         <module>iot-vehicle-service</module>
         <module>iot-vehicle-web</module>
@@ -150,7 +152,17 @@
             <!-- Project Modules -->
             <dependency>
                 <groupId>com.iot.vehicle</groupId>
-                <artifactId>iot-vehicle-common</artifactId>
+                <artifactId>iot-vehicle-common-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.iot.vehicle</groupId>
+                <artifactId>iot-vehicle-common-mybatis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.iot.vehicle</groupId>
+                <artifactId>iot-vehicle-common-redis</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -190,6 +202,8 @@
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                         <encoding>${project.build.sourceEncoding}</encoding>
+                        <!-- 保留参数名，用于反射和API文档 -->
+                        <parameters>true</parameters>
                     </configuration>
                 </plugin>
             </plugins>
