@@ -11,8 +11,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author dongxiang.wu
  * @version 1.0.0
  */
-@SpringBootApplication(scanBasePackages = "com.iot.vehicle")
-@MapperScan("com.iot.vehicle.service.mapper")
+@SpringBootApplication(scanBasePackages = {
+        "com.iot.vehicle.web",
+        "com.iot.vehicle.service",
+        "com.iot.vehicle.common.web"
+})
 public class IotVehicleApplication {
 
     public static void main(String[] args) {

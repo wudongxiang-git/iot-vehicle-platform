@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iot.vehicle.service.mapper.SysRoleMapper">
+
+    <!-- 根据用户ID查询角色列表 -->
+    <select id="selectRolesByUserId" resultType="com.iot.vehicle.api.entity.SysRole">
+        SELECT r.*
+        FROM sys_role r
+        INNER JOIN sys_user_role ur ON r.id = ur.role_id
+        WHERE ur.user_id = #{userId}
+          AND r.deleted = 0
+          AND r.status = 1
+        ORDER BY r.sort_order ASC
+    </select>
+
+</mapper>
+

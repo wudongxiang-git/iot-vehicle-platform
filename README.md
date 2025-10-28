@@ -73,9 +73,10 @@ IoT Vehicle Platform 是一个基于 Spring Boot 3 和 PostgreSQL 构建的通�
 ```
 iot-vehicle-platform/
 ├── iot-vehicle-parent              # 父模块（依赖管理）
-├── iot-vehicle-common-core         # 公共核心模块（工具类、常量、异常）
-├── iot-vehicle-common-mybatis      # MyBatis-Plus公共模块（分页等）
+├── iot-vehicle-common-core         # 公共核心模块（无框架依赖）
+├── iot-vehicle-common-mybatis      # MyBatis-Plus公共模块
 ├── iot-vehicle-common-redis        # Redis公共模块（待开发）
+├── iot-vehicle-common-web          # Web公共模块
 ├── iot-vehicle-api                 # API模块（实体类、DTO、VO）
 ├── iot-vehicle-service             # 服务层（业务逻辑）
 ├── iot-vehicle-web                 # Web层（Controller、配置）
@@ -149,7 +150,8 @@ mvn spring-boot:run
 #### 4. 访问应用
 
 - 应用地址: http://localhost:8080/api
-- API文档: http://localhost:8080/api/doc.html
+- API文档: http://localhost:8080/api/doc.html (Knife4j增强UI)
+- API文档(Swagger): http://localhost:8080/api/swagger-ui/index.html
 - 健康检查: http://localhost:8080/api/health
 
 #### 5. 停止服务

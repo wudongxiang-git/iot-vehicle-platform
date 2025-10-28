@@ -37,11 +37,13 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- MapStruct -->
+        <!-- MapStruct - 暂时注释调试 -->
+        <!--
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
         </dependency>
+        -->
     </dependencies>
 
     <build>
@@ -58,11 +60,14 @@
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
                         </path>
+                        <!-- MapStruct暂时注释调试 -->
+                        <!--
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${mapstruct.version}</version>
                         </path>
+                        -->
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>

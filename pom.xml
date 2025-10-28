@@ -17,6 +17,7 @@
         <module>iot-vehicle-common-core</module>
         <module>iot-vehicle-common-mybatis</module>
         <module>iot-vehicle-common-redis</module>
+        <module>iot-vehicle-common-web</module>
         <module>iot-vehicle-api</module>
         <module>iot-vehicle-service</module>
         <module>iot-vehicle-web</module>
@@ -30,12 +31,12 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
         <!-- Spring Boot -->
-        <spring-boot.version>3.2.0</spring-boot.version>
+        <spring-boot.version>3.1.5</spring-boot.version>
         
         <!-- Database -->
         <postgresql.version>42.7.1</postgresql.version>
-        <mybatis-plus.version>3.5.5</mybatis-plus.version>
-        <druid.version>1.2.20</druid.version>
+        <mybatis-plus.version>3.5.7</mybatis-plus.version>
+        <druid.version>1.2.21</druid.version>
         
         <!-- Redis -->
         <redisson.version>3.25.2</redisson.version>
@@ -44,7 +45,8 @@
         <lombok.version>1.18.30</lombok.version>
         <hutool.version>5.8.24</hutool.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <knife4j.version>4.4.0</knife4j.version>
+        <knife4j.version>4.5.0</knife4j.version>
+        <springdoc.version>2.3.0</springdoc.version>
         
         <!-- MQTT -->
         <paho.version>1.2.5</paho.version>
@@ -54,6 +56,12 @@
         
         <!-- Validation -->
         <jakarta-validation.version>3.0.2</jakarta-validation.version>
+        
+        <!-- JWT -->
+        <jjwt.version>0.12.3</jjwt.version>
+        
+        <!-- Security -->
+        <spring-security-crypto.version>6.2.0</spring-security-crypto.version>
     </properties>
 
     <dependencyManagement>
@@ -121,11 +129,18 @@
                 <version>${mapstruct.version}</version>
             </dependency>
 
-            <!-- Knife4j (Swagger UI) -->
+            <!-- Knife4j (Swagger UI增强) -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
+            </dependency>
+            
+            <!-- Springdoc OpenAPI UI (备用) -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
             </dependency>
 
             <!-- Eclipse Paho MQTT -->
@@ -149,6 +164,30 @@
                 <version>${jakarta-validation.version}</version>
             </dependency>
 
+            <!-- JJWT -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <!-- Spring Security Crypto -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-crypto</artifactId>
+                <version>${spring-security-crypto.version}</version>
+            </dependency>
+
             <!-- Project Modules -->
             <dependency>
                 <groupId>com.iot.vehicle</groupId>
@@ -163,6 +202,11 @@
             <dependency>
                 <groupId>com.iot.vehicle</groupId>
                 <artifactId>iot-vehicle-common-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.iot.vehicle</groupId>
+                <artifactId>iot-vehicle-common-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

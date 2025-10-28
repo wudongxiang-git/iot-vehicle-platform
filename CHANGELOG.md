@@ -10,78 +10,94 @@
 ## [Unreleased]
 
 ### 计划中
-- 用户权限模块
 - 设备管理功能
 - MQTT 接入层
 - 数据采集模块
 
 ---
 
+## [1.0.0-beta] - 2025-10-28
+
+### 新增
+
+**用户权限模块（RBAC模型）**
+- 5个数据库表：sys_user、sys_role、sys_permission、sys_user_role、sys_role_permission
+- 14个实体类和DTO/VO对象
+- 预置超级管理员账号（admin/123456）
+
+**JWT认证系统**
+- JwtUtil工具类（Token生成/验证/刷新）
+- PasswordUtil工具类（BCrypt加密）
+- AuthController：注册、登录、登出、刷新Token（4个接口）
+
+**用户管理**
+- UserController：用户CRUD、密码管理、状态管理（8个接口）
+- UserService：完整的业务逻辑实现
+
+**角色管理**  
+- RoleController：角色CRUD、权限分配、角色分配（9个接口）
+- RoleService：角色业务逻辑实现
+- 3个Mapper接口和2个XML映射文件
+
+**权限验证框架**
+- @RequirePermission和@RequireRole注解
+- PermissionAspect权限验证切面
+- JwtInterceptor拦截器
+
+**新增模块**
+- iot-vehicle-common-web模块（Web工具类）
+- UserContextUtil（用户上下文工具）
+
+### 变更
+- Spring Boot版本：3.2.0 → 3.1.5（解决兼容性）
+- MyBatis-Plus版本：3.5.5 → 3.5.7
+
+### 修复
+- 修复Spring Boot 3与MyBatis-Plus的兼容性问题
+- 修复API参数名显示问题（@RequestParam明确指定参数名）
+
+### 技术栈
+Spring Boot 3.1.5 + MyBatis-Plus 3.5.7 + JWT + Knife4j 4.5.0
+
+
+作者：dongxiang.wu
+
+---
+
 ## [1.0.0-alpha] - 2025-10-26
 
 ### 新增
-- 创建 Maven 多模块项目结构
-  - iot-vehicle-common-core（核心模块）
-  - iot-vehicle-common-mybatis（MyBatis-Plus 模块）
-  - iot-vehicle-common-redis（Redis 模块，空壳）
-  - iot-vehicle-api（API 模块）
-  - iot-vehicle-service（服务层）
-  - iot-vehicle-web（Web 层）
 
-- Spring Boot 基础配置
-  - 跨域配置（CorsConfig）
-  - Jackson 序列化配置（支持 Java 8 时间格式化）
-  - 请求日志拦截器（LogInterceptor）
-  - MyBatis-Plus 分页插件（PostgreSQL 适配）
-  - WebMVC 配置
+**项目架构**
+- Maven多模块项目：common-core、common-mybatis、common-redis、api、service、web
+- 清晰的分层架构和依赖管理
 
-- 统一返回结果封装
-  - Result 统一返回结果
-  - ResultCode 返回状态码枚举
-  - PageResult 分页结果封装
-  - PageUtil 分页工具类
+**基础功能**
+- Result统一返回结果封装
+- PageResult分页结果封装
+- BusinessException业务异常
+- GlobalExceptionHandler全局异常处理
+- 健康检查接口
 
-- 异常处理
-  - BusinessException 业务异常
-  - GlobalExceptionHandler 全局异常处理器
-  - 支持多种异常类型处理
+**Spring Boot配置**
+- CorsConfig跨域配置
+- JacksonConfig序列化配置
+- LogInterceptor请求日志拦截器
+- MybatisPlusConfig分页插件
 
-- 测试接口
-  - 健康检查接口（/api/health）
-  - 分页测试接口（/api/health/test-page）
+**Docker开发环境**
+- docker-compose.yml（PostgreSQL + Redis + EMQ X）
+- start-dev.sh一键启动脚本
 
-- Docker 开发环境
-  - docker-compose.yml（PostgreSQL + Redis + EMQ X）
-  - 一键启动脚本（start-dev.sh）
-  - 数据库初始化脚本
-
-- 项目文档
-  - README.md（项目说明）
-  - CONTRIBUTING.md（贡献指南）
-  - LICENSE（Apache 2.0）
-  - .gitmessage（Git 提交模板）
-  - CHANGELOG.md（更新日志）
-
-### 变更
-- 重构 common 模块架构
-  - 拆分为 core/mybatis/redis 三个模块
-  - 解决依赖耦合问题
-  - 更新所有包名和导入语句
-
-### 修复
-- 修复 API 文档参数名显示为 arg0/arg1 的问题
-- 配置 Maven 保留方法参数名
+**项目规范**
+- Git提交规范（.gitmessage）
+- 贡献指南（CONTRIBUTING.md）
+- Apache 2.0开源协议
 
 ### 技术栈
-- Spring Boot 3.2.0
-- Java 17
-- PostgreSQL 15
-- MyBatis-Plus 3.5.5
-- Redis 7.0
-- Docker + Docker Compose
+Spring Boot 3.2.0 + PostgreSQL 15 + MyBatis-Plus 3.5.5 + Redis
 
-### 作者
-dongxiang.wu
+作者：dongxiang.wu
 
 ---
 

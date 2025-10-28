@@ -1,0 +1,75 @@
+### IoT Vehicle Platform - API测试文件
+### 作者: dongxiang.wu
+### 使用方法: 在IntelliJ IDEA中直接运行，或使用REST Client插件
+
+### 环境变量
+@baseUrl = http://localhost:8080/api
+@token = 
+
+### ============================================
+### 健康检查
+### ============================================
+
+### 健康检查
+GET {{baseUrl}}/health
+
+### 测试接口
+GET {{baseUrl}}/health/test
+
+### 测试分页
+GET {{baseUrl}}/health/test-page?current=1&size=10
+
+### ============================================
+### 用户认证
+### ============================================
+
+### 用户注册
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "123456",
+  "nickname": "测试用户",
+  "email": "testuser@example.com",
+  "phone": "13800138000"
+}
+
+### 用户登录
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### 用户登录（测试用户）
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "123456"
+}
+
+### 用户登出
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{token}}
+
+### 刷新Token
+POST {{baseUrl}}/auth/refresh
+Authorization: Bearer {{token}}
+
+### ============================================
+### 用户管理（待实现）
+### ============================================
+
+### 获取当前用户信息
+# GET {{baseUrl}}/user/current
+# Authorization: Bearer {{token}}
+
+### 用户列表
+# GET {{baseUrl}}/user/list?current=1&size=10
+# Authorization: Bearer {{token}}
+
