@@ -114,11 +114,71 @@ VALUES
      '测试厂商', 1, 0, 1, 'MQTT', 'test_secret_003', 1)
 ON CONFLICT (device_id) DO NOTHING;
 
+-- ============================================
+-- 设备分组表（支持树形结构）
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS tb_device_group (
+    id BIGSERIAL PRIMARY KEY,
+    parent_id BIGINT DEFAULT 0,
+    group_name VARCHAR(100) NOT NULL,
+    group_code VARCHAR(50) UNIQUE,
+    group_type VARCHAR(20),
+    description VARCHAR(200),
+    sort_order INT DEFAULT 0,
+    level_path VARCHAR(500),
+    status SMALLINT DEFAULT 1,
+    deleted SMALLINT DEFAULT 0,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    create_by BIGINT,
+    update_by BIGINT
+);
+
+-- 添加列注释
+COMMENT ON COLUMN tb_device_group.id IS '主键ID';
+COMMENT ON COLUMN tb_device_group.parent_id IS '父分组ID（0表示顶级分组）';
+COMMENT ON COLUMN tb_device_group.group_name IS '分组名称';
+COMMENT ON COLUMN tb_device_group.group_code IS '分组编码（唯一）';
+COMMENT ON COLUMN tb_device_group.group_type IS '分组类型（department/region/fleet等）';
+COMMENT ON COLUMN tb_device_group.description IS '分组描述';
+COMMENT ON COLUMN tb_device_group.sort_order IS '排序';
+COMMENT ON COLUMN tb_device_group.level_path IS '层级路径（如：0/1/3，用于查询所有子分组）';
+COMMENT ON COLUMN tb_device_group.status IS '状态：0-禁用，1-正常';
+COMMENT ON COLUMN tb_device_group.deleted IS '删除标记：0-未删除，1-已删除';
+COMMENT ON COLUMN tb_device_group.create_time IS '创建时间';
+COMMENT ON COLUMN tb_device_group.update_time IS '更新时间';
+COMMENT ON COLUMN tb_device_group.create_by IS '创建人ID';
+COMMENT ON COLUMN tb_device_group.update_by IS '更新人ID';
+
+-- 创建索引
+CREATE INDEX idx_parent_id_group ON tb_device_group(parent_id);
+CREATE INDEX idx_group_code ON tb_device_group(group_code);
+CREATE INDEX idx_group_type ON tb_device_group(group_type);
+CREATE INDEX idx_status_group ON tb_device_group(status);
+CREATE INDEX idx_deleted_group ON tb_device_group(deleted);
+CREATE INDEX idx_level_path ON tb_device_group(level_path);
+
+-- 添加表注释
+COMMENT ON TABLE tb_device_group IS '设备分组表（支持树形结构）';
+
+-- 插入默认分组
+INSERT INTO tb_device_group (
+    id, parent_id, group_name, group_code, group_type, 
+    description, sort_order, level_path, status
+)
+VALUES 
+    (1, 0, '全部设备', 'ALL_DEVICES', 'root', '所有设备的根分组', 1, '0', 1),
+    (2, 1, '测试车队', 'TEST_FLEET', 'fleet', '测试用车队', 1, '0/1', 1),
+    (3, 1, '华东区域', 'EAST_CHINA', 'region', '华东区域设备', 2, '0/1', 1)
+ON CONFLICT (group_code) DO NOTHING;
+
 -- 输出初始化信息
 DO $$
 BEGIN
     RAISE NOTICE 'Device Tables Created Successfully!';
     RAISE NOTICE 'Test Devices: 3 devices inserted';
+    RAISE NOTICE 'Test Groups: 3 groups inserted';
     RAISE NOTICE 'Author: dongxiang.wu';
     RAISE NOTICE 'Timestamp: %', CURRENT_TIMESTAMP;
 END $$;
