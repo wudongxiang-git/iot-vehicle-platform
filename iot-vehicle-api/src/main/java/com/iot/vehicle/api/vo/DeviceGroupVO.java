@@ -67,6 +67,18 @@ public class DeviceGroupVO implements Serializable {
     private LocalDateTime createTime;
 
     /**
+     * 设备数量（实时计算，考虑数据权限）
+     * 注意：此字段不存储在数据库中，由Service层查询时动态计算
+     */
+    private Integer deviceCount;
+
+    /**
+     * 在线设备数量（实时计算，考虑数据权限）
+     * 注意：此字段不存储在数据库中，由Service层查询时动态计算
+     */
+    private Integer onlineCount;
+
+    /**
      * 子分组列表（用于树形结构展示）
      */
     private List<DeviceGroupVO> children;

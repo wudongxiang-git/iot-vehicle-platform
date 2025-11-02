@@ -173,12 +173,107 @@ VALUES
     (3, 1, '华东区域', 'EAST_CHINA', 'region', '华东区域设备', 2, '0/1', 1)
 ON CONFLICT (group_code) DO NOTHING;
 
+-- ============================================
+-- 设备类型表
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS tb_device_type (
+    id BIGSERIAL PRIMARY KEY,
+    type_code VARCHAR(50) NOT NULL UNIQUE,
+    type_name VARCHAR(100) NOT NULL,
+    category VARCHAR(50),
+    description VARCHAR(200),
+    icon VARCHAR(100),
+    properties JSONB,
+    sort_order INT DEFAULT 0,
+    status SMALLINT DEFAULT 1,
+    deleted SMALLINT DEFAULT 0,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    create_by BIGINT,
+    update_by BIGINT
+);
+
+-- 添加列注释
+COMMENT ON COLUMN tb_device_type.id IS '主键ID';
+COMMENT ON COLUMN tb_device_type.type_code IS '类型编码（唯一）';
+COMMENT ON COLUMN tb_device_type.type_name IS '类型名称';
+COMMENT ON COLUMN tb_device_type.category IS '类型分类（vehicle/sensor/terminal等）';
+COMMENT ON COLUMN tb_device_type.description IS '类型描述';
+COMMENT ON COLUMN tb_device_type.icon IS '图标';
+COMMENT ON COLUMN tb_device_type.properties IS '类型属性配置（JSON格式）';
+COMMENT ON COLUMN tb_device_type.sort_order IS '排序';
+COMMENT ON COLUMN tb_device_type.status IS '状态：0-禁用，1-正常';
+COMMENT ON COLUMN tb_device_type.deleted IS '删除标记：0-未删除，1-已删除';
+COMMENT ON COLUMN tb_device_type.create_time IS '创建时间';
+COMMENT ON COLUMN tb_device_type.update_time IS '更新时间';
+COMMENT ON COLUMN tb_device_type.create_by IS '创建人ID';
+COMMENT ON COLUMN tb_device_type.update_by IS '更新人ID';
+
+-- 创建索引
+CREATE INDEX idx_type_code ON tb_device_type(type_code);
+CREATE INDEX idx_category ON tb_device_type(category);
+CREATE INDEX idx_status_type ON tb_device_type(status);
+CREATE INDEX idx_deleted_type ON tb_device_type(deleted);
+
+-- 添加表注释
+COMMENT ON TABLE tb_device_type IS '设备类型表';
+
+-- 插入预置设备类型
+INSERT INTO tb_device_type (
+    type_code, type_name, category, description, sort_order, status
+)
+VALUES 
+    ('VEHICLE_CAR', '小型汽车', 'vehicle', '普通小型汽车', 1, 1),
+    ('VEHICLE_TRUCK', '货车', 'vehicle', '货运车辆', 2, 1),
+    ('VEHICLE_BUS', '客车', 'vehicle', '客运车辆', 3, 1),
+    ('TERMINAL_OBD', 'OBD终端', 'terminal', 'OBD车载终端', 4, 1),
+    ('TERMINAL_GPS', 'GPS定位器', 'terminal', 'GPS定位设备', 5, 1),
+    ('SENSOR_TEMP', '温度传感器', 'sensor', '温度监测传感器', 6, 1)
+ON CONFLICT (type_code) DO NOTHING;
+
+-- ============================================
+-- 设备在线状态记录表
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS tb_device_online_log (
+    id BIGSERIAL PRIMARY KEY,
+    device_id VARCHAR(64) NOT NULL,
+    event_type SMALLINT NOT NULL,
+    event_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ip_address VARCHAR(50),
+    client_info VARCHAR(200),
+    remark VARCHAR(500),
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 添加列注释
+COMMENT ON COLUMN tb_device_online_log.id IS '主键ID';
+COMMENT ON COLUMN tb_device_online_log.device_id IS '设备ID';
+COMMENT ON COLUMN tb_device_online_log.event_type IS '事件类型：1-上线，0-离线';
+COMMENT ON COLUMN tb_device_online_log.event_time IS '事件时间';
+COMMENT ON COLUMN tb_device_online_log.ip_address IS 'IP地址';
+COMMENT ON COLUMN tb_device_online_log.client_info IS '客户端信息（SDK版本等）';
+COMMENT ON COLUMN tb_device_online_log.remark IS '备注';
+COMMENT ON COLUMN tb_device_online_log.create_time IS '记录创建时间';
+
+-- 创建索引
+CREATE INDEX idx_device_id_log ON tb_device_online_log(device_id);
+CREATE INDEX idx_event_time ON tb_device_online_log(event_time);
+CREATE INDEX idx_event_type ON tb_device_online_log(event_type);
+CREATE INDEX idx_device_event ON tb_device_online_log(device_id, event_time DESC);
+
+-- 添加表注释
+COMMENT ON TABLE tb_device_online_log IS '设备在线状态记录表';
+
 -- 输出初始化信息
 DO $$
 BEGIN
     RAISE NOTICE 'Device Tables Created Successfully!';
+    RAISE NOTICE 'Tables: tb_device, tb_device_group, tb_device_type, tb_device_online_log';
     RAISE NOTICE 'Test Devices: 3 devices inserted';
     RAISE NOTICE 'Test Groups: 3 groups inserted';
+    RAISE NOTICE 'Device Types: 6 types inserted';
     RAISE NOTICE 'Author: dongxiang.wu';
     RAISE NOTICE 'Timestamp: %', CURRENT_TIMESTAMP;
 END $$;

@@ -60,18 +60,6 @@ public class DeviceGroup extends BaseEntity {
     private String levelPath;
 
     /**
-     * 设备数量
-     */
-    @TableField("device_count")
-    private Integer deviceCount;
-
-    /**
-     * 在线设备数量
-     */
-    @TableField("online_count")
-    private Integer onlineCount;
-
-    /**
      * 状态：0-禁用，1-正常
      */
     @TableField("status")
