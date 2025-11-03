@@ -61,6 +61,17 @@ mybatis:
   type-aliases-package: com.iot.vehicle.api.entity
   mapper-locations: classpath*:/mapper/**/*.xml
 
+# MQTT配置
+mqtt:
+  broker: tcp://localhost:1883
+  client-id: iot-vehicle-server-${random.value}
+  username: 
+  password: 
+  timeout: 30
+  keepalive: 60
+  clean-session: true
+  auto-reconnect: true
+
 # Logging
 logging:
   level:
