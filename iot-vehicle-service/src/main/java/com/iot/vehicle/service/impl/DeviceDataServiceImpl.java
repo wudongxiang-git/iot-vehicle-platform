@@ -4,8 +4,10 @@ import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.iot.vehicle.api.dto.DeviceDataDTO;
 import com.iot.vehicle.api.entity.DeviceData;
+import com.iot.vehicle.api.entity.DeviceLatestData;
 import com.iot.vehicle.common.core.exception.BusinessException;
 import com.iot.vehicle.service.mapper.DeviceDataMapper;
+import com.iot.vehicle.service.mapper.DeviceLatestDataMapper;
 import com.iot.vehicle.service.service.DeviceDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class DeviceDataServiceImpl implements DeviceDataService {
 
     private final DeviceDataMapper deviceDataMapper;
+    private final DeviceLatestDataMapper deviceLatestDataMapper;
     private final RedisTemplate<String, Object> redisTemplate;
 
     /**
@@ -49,7 +52,7 @@ public class DeviceDataServiceImpl implements DeviceDataService {
         // Day4: 数据清洗
         DeviceData deviceData = cleanAndConvert(deviceId, dataDTO);
 
-        // Day5: 数据入库
+        // Day5: 数据入库（历史数据表）
         try {
             deviceDataMapper.insert(deviceData);
             log.debug("设备数据保存成功: deviceId={}", deviceId);
@@ -57,6 +60,9 @@ public class DeviceDataServiceImpl implements DeviceDataService {
             log.error("设备数据保存失败: deviceId={}", deviceId, e);
             throw new BusinessException("数据保存失败");
         }
+
+        // 更新最新数据表（持久化最新数据）
+        updateLatestDataTable(deviceId, deviceData);
 
         // Day6: 更新Redis缓存（最新数据）
         cacheLatestData(deviceId, deviceData);
@@ -207,6 +213,45 @@ public class DeviceDataServiceImpl implements DeviceDataService {
         deviceData.setRawData(JSON.toJSONString(dataDTO));
 
         return deviceData;
+    }
+
+    /**
+     * 更新最新数据表（使用UPSERT逻辑）
+     */
+    private void updateLatestDataTable(String deviceId, DeviceData deviceData) {
+        try {
+            // 转换为最新数据实体
+            DeviceLatestData latestData = new DeviceLatestData();
+            latestData.setDeviceId(deviceId);
+            latestData.setDataTime(deviceData.getDataTime());
+            latestData.setLatitude(deviceData.getLatitude());
+            latestData.setLongitude(deviceData.getLongitude());
+            latestData.setSpeed(deviceData.getSpeed());
+            latestData.setDirection(deviceData.getDirection());
+            latestData.setGpsValid(deviceData.getGpsValid());
+            latestData.setSpeedRpm(deviceData.getSpeedRpm());
+            latestData.setFuelLevel(deviceData.getFuelLevel());
+            latestData.setEngineTemp(deviceData.getEngineTemp());
+            latestData.setBatteryVoltage(deviceData.getBatteryVoltage());
+            latestData.setMileage(deviceData.getMileage());
+            latestData.setSignalStrength(deviceData.getSignalStrength());
+            latestData.setUpdateTime(LocalDateTime.now());
+
+            // 检查是否已存在
+            DeviceLatestData existData = deviceLatestDataMapper.selectById(deviceId);
+            if (existData == null) {
+                // 新增
+                deviceLatestDataMapper.insert(latestData);
+            } else {
+                // 更新
+                deviceLatestDataMapper.updateById(latestData);
+            }
+            
+            log.debug("更新最新数据表成功: deviceId={}", deviceId);
+        } catch (Exception e) {
+            log.error("更新最新数据表失败: deviceId={}", deviceId, e);
+            // 更新失败不影响主流程
+        }
     }
 
     /**
