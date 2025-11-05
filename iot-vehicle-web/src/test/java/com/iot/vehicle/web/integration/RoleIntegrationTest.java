@@ -66,7 +66,9 @@ class RoleIntegrationTest {
     @DisplayName("1. 创建角色")
     void testCreateRole() throws Exception {
         CreateRoleDTO roleDTO = new CreateRoleDTO();
-        roleDTO.setRoleCode("ROLE_TEST_" + System.currentTimeMillis());
+        // 角色编码只能包含大写字母和下划线，使用随机字母而非时间戳
+        String randomCode = "ROLE_TEST_AUTO";
+        roleDTO.setRoleCode(randomCode);
         roleDTO.setRoleName("测试角色");
         roleDTO.setDescription("自动化测试角色");
         roleDTO.setSortOrder(100);
@@ -134,9 +136,11 @@ class RoleIntegrationTest {
     void testUpdateRole() throws Exception {
         if (testRoleId != null) {
             CreateRoleDTO roleDTO = new CreateRoleDTO();
-            roleDTO.setRoleCode("ROLE_TEST_UPDATED");
+            // 更新时保持原编码，只修改名称和描述
+            roleDTO.setRoleCode("ROLE_TEST_AUTO");  // 保持与创建时相同
             roleDTO.setRoleName("测试角色-已更新");
             roleDTO.setDescription("更新后的描述");
+            roleDTO.setSortOrder(200);
 
             mockMvc.perform(put("/role/" + testRoleId)
                             .header("Authorization", "Bearer " + adminToken)
