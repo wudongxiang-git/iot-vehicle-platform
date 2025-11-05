@@ -2,6 +2,7 @@ package com.iot.vehicle.api.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.iot.vehicle.common.mybatis.handler.JsonbTypeHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -143,7 +144,7 @@ public class Device extends BaseEntity {
     /**
      * 最后位置信息（JSON格式）
      */
-    @TableField("last_location")
+    @TableField(value = "last_location", typeHandler = JsonbTypeHandler.class)
     private String lastLocation;
 
     /**
@@ -161,7 +162,7 @@ public class Device extends BaseEntity {
     /**
      * 设备元数据（JSON格式）
      */
-    @TableField("metadata")
+    @TableField(value = "metadata", typeHandler = JsonbTypeHandler.class)
     private String metadata;
 
     /**

@@ -2,6 +2,7 @@ package com.iot.vehicle.api.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.iot.vehicle.common.mybatis.handler.JsonbTypeHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -50,7 +51,7 @@ public class DeviceType extends BaseEntity {
     /**
      * 类型属性配置（JSON格式）
      */
-    @TableField("properties")
+    @TableField(value = "properties", typeHandler = JsonbTypeHandler.class)
     private String properties;
 
     /**

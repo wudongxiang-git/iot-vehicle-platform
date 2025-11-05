@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.iot.vehicle.common.mybatis.handler.JsonbTypeHandler;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -129,7 +130,7 @@ public class DeviceData implements Serializable {
     /**
      * 原始数据（JSON格式）
      */
-    @TableField("raw_data")
+    @TableField(value = "raw_data", typeHandler = JsonbTypeHandler.class)
     private String rawData;
 
     /**
