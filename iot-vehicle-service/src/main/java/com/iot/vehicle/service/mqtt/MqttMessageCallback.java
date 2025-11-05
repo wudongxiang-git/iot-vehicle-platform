@@ -2,6 +2,8 @@ package com.iot.vehicle.service.mqtt;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.iot.vehicle.api.dto.DeviceDataDTO;
+import com.iot.vehicle.service.service.DeviceDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -20,6 +22,9 @@ public class MqttMessageCallback implements MqttCallback {
 
     @Autowired
     private DeviceAuthService deviceAuthService;
+
+    @Autowired
+    private DeviceDataService deviceDataService;
 
     /**
      * 连接丢失回调
@@ -102,8 +107,17 @@ public class MqttMessageCallback implements MqttCallback {
      * 处理设备数据消息
      */
     private void handleDeviceData(String deviceId, String payload) {
-        log.debug("处理设备数据: deviceId={}, payload={}", deviceId, payload);
-        // TODO: 实现数据采集功能
+        try {
+            // 解析JSON数据
+            DeviceDataDTO dataDTO = JSON.parseObject(payload, DeviceDataDTO.class);
+            
+            // 保存数据
+            deviceDataService.saveDeviceData(deviceId, dataDTO);
+            
+            log.debug("设备数据处理成功: deviceId={}", deviceId);
+        } catch (Exception e) {
+            log.error("处理设备数据失败: deviceId={}, payload={}", deviceId, payload, e);
+        }
     }
 
     /**

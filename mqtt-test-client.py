@@ -47,14 +47,30 @@ def send_online_message(client):
 def send_device_data(client):
     topic = f"device/{DEVICE_ID}/data"
     payload = {
-        "speed": random.randint(0, 120),
-        "rpm": random.randint(800, 5000),
-        "fuel": random.randint(0, 100),
-        "temperature": random.randint(20, 90),
-        "timestamp": int(time.time() * 1000)
+        "timestamp": int(time.time() * 1000),
+        "gps": {
+            "lat": 31.23 + random.uniform(-0.01, 0.01),
+            "lng": 121.47 + random.uniform(-0.01, 0.01),
+            "altitude": 10.0 + random.uniform(-5, 5),
+            "speed": random.randint(0, 120),
+            "direction": random.randint(0, 360),
+            "valid": True,
+            "satellites": random.randint(4, 12)
+        },
+        "obd": {
+            "rpm": random.randint(800, 5000),
+            "fuelLevel": random.randint(20, 100),
+            "fuelConsumption": round(random.uniform(5.0, 15.0), 2),
+            "engineTemp": random.randint(60, 95),
+            "mileage": 12345.67 + random.uniform(0, 10)
+        },
+        "status": {
+            "batteryVoltage": round(random.uniform(11.5, 14.5), 2),
+            "signalStrength": random.randint(50, 100)
+        }
     }
     client.publish(topic, json.dumps(payload))
-    print(f"📤 发送设备数据: {json.dumps(payload)}")
+    print(f"📤 发送设备数据: speed={payload['gps']['speed']}km/h, rpm={payload['obd']['rpm']}")
 
 # 发送位置数据
 def send_location_data(client):
