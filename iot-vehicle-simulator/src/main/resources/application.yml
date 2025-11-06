@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: iot-vehicle-simulator
+
+# MQTT配置
+mqtt:
+  broker: tcp://localhost:1883
+  username: 
+  password: 
+
+# 模拟器配置
+simulator:
+  # 模拟设备数量
+  device-count: 10
+  # 数据发送间隔（秒）
+  send-interval: 5
+  # 是否自动启动
+  auto-start: false
+  # 初始GPS坐标（上海市中心）
+  init-latitude: 31.2304
+  init-longitude: 121.4737
+  # GPS漂移范围（度）
+  gps-drift-range: 0.01
+  # 速度范围（km/h）
+  speed-min: 0
+  speed-max: 120
+  # 转速范围（RPM）
+  rpm-min: 800
+  rpm-max: 5000
+
+logging:
+  level:
+    root: INFO
+    com.iot.vehicle.simulator: DEBUG
+

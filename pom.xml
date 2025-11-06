@@ -21,6 +21,7 @@
         <module>iot-vehicle-api</module>
         <module>iot-vehicle-service</module>
         <module>iot-vehicle-web</module>
+        <module>iot-vehicle-simulator</module>
     </modules>
 
     <properties>
